@@ -54,7 +54,7 @@ def get_logger(dir,filename):
     return logger
 
 # Plot predictions 
-def plot_samples(pred,sample,epoch=0,batch=0) -> None:
+def plot_samples(pred,sample,loss,epoch,batch,dir) -> None:
     true_images = [sample[i].detach().numpy().reshape(64,64) for i in range(3)]
     pred_images = [pred[i].detach().numpy().reshape(64,64) for i in range(3)]
     fig, axes = plt.subplots(3,2,figsize=(6,6),dpi=200,tight_layout=True,gridspec_kw={'wspace': -0.20, 'hspace': 0.08})
@@ -70,8 +70,8 @@ def plot_samples(pred,sample,epoch=0,batch=0) -> None:
         ax[1].set_yticks([])
         plt.colorbar(true_plot,ax=ax[1])
         true_plot.set_clim(minv,maxv)
-    plt.suptitle(f"Batch {batch}")
-    plt.savefig(os.path.join(dir,f"epoch_{epoch}_batch_{batch}.png"))
+    plt.suptitle(f"=== Epoch: {epoch} === Batch: {batch} === Loss: {loss}")
+    plt.savefig(os.path.join(dir,f"epoch_{epoch}_batch_{batch}_loss_{loss}.png"))
 
 def dataloader(input_shape,batch_size) -> torch.utils.data.DataLoader:
 
@@ -144,7 +144,7 @@ def train(model,loader,device_ids,logger,plot_freq,epochs,lr,betas,decay):
             if ix % plot_freq == 0:
                 logger.info(f"\tEpoch: {epoch} == Batch: {ix} == MSE: {loss.item():.4f}")
                 # Plot samples - must send data back to cpu 
-                plot_samples(out.cpu(),xgpu.cpu(),epoch,ix,'images')
+                plot_samples(out.cpu(),xgpu.cpu(),loss.item(),epoch,ix,'images')
 
     return model
 
