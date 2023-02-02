@@ -40,7 +40,7 @@ def get_logger(dir,filename):
     # Remove existing log if exists 
     filename = os.path.join(dir,filename)
     if filename in os.listdir(dir):
-        os.system("rm {filename}")
+        os.system("rm '{filename}'")
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
