@@ -5,7 +5,7 @@ from typing import List, Tuple
 
 # Module imports    
 from models import model_dict
-import decoder 
+import build 
 import parsing
 
 def run_encoder_test(model: nn.Module, skip_layers: List = [], input_shape: Tuple = (3,224,224)) -> nn.Sequential:
@@ -45,7 +45,7 @@ def run_decoder_test(parsed_model: nn.Sequential, input_shape: Tuple = (3,224,22
     encoded_shape = encoded.shape
 
     # Construct decoder model 
-    conv_decoder = decoder.ConvolutionalDecoder(parsed_model, input_shape)
+    conv_decoder = build.ConvolutionalDecoder(parsed_model, input_shape)
 
     # Run decoding pass
     decoded = conv_decoder(torch.randn(encoded_shape))
